@@ -1,0 +1,34 @@
+.allBody {
+    background: linear-gradient(to bottom right,rgba(21, 87, 153, 0.8) 0%, rgba(21, 153, 87, 0.6) 100%);
+    .rightBody {
+        padding: 0 15px;
+        .pageTitle {
+            color: #3b3b3b;
+            font-weight: 600;
+            font-size: 18px;
+        }
+    }
+    .error {
+        color: red;
+        padding: 10px;
+        display: block;
+        margin-bottom: 10px;
+    }
+    .sec { 
+        background-color: rgba($color: #FFF, $alpha: 0.8);
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .title {
+        color: #FFF;
+    }
+    .btn {
+        background: linear-gradient(to bottom right, #155799 0%, #159957 100%); 
+        border: 1px solid #fff;
+        &:hover {
+            background: linear-gradient(to bottom left, #155799 0%, #159957 100%); 
+        }
+    }
+}
+
+

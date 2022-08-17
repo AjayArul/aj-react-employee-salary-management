@@ -1,0 +1,108 @@
+@mixin addGreyScrollBar {
+    &::-webkit-scrollbar {
+      width: 5px;
+    }
+    &::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px #eaeaf2;
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #eaeaf2;
+      border-radius: 10px;
+    }
+}
+
+
+.sideBar {
+    background: linear-gradient(to bottom, #155799 0%, #159957 100%);
+    color: #fff;
+    // border-right: 1px solid #eaeaf2;
+    padding-left: 8px;
+    padding-right: 7px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 100%;
+    height: 100vh;
+    @include addGreyScrollBar;
+
+    h1 {
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+    .listItem {
+        // height: 45px;
+        margin-bottom: 2px;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: inherit;
+
+        .listItemLable {
+            padding: 10px;
+        }
+
+        &.hasChild {
+           > .MuiTreeItem-content {
+                .MuiTreeItem-label {
+                    padding: 10px;
+                }
+           }
+        }
+
+        &:hover, &:focus {
+            background-color: rgba(0, 0, 0, 0.04);
+            > .MuiTreeItem-content {
+                .MuiTreeItem-label {   
+                    background-color: inherit;
+                }
+            }
+        }
+
+        &.selectedItem{
+            color: #fff;
+            // background-color: chocolate;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        &:not(.hasChild) {
+            .MuiTreeItem-iconContainer {
+                display: none;
+            }    
+        }
+       
+        &.hasChild, &.Mui-selected, &.Mui-selected:hover, &.Mui-selected:focus  {
+            > .MuiTreeItem-content {
+                .MuiTreeItem-label {   
+                    background-color: inherit;
+                }
+            }
+        }
+
+        &.Mui-expanded {
+            .MuiTreeItem-label {   
+                font-weight: bold;
+            }
+        }
+    } 
+}
+
+.navBtn {
+    display: none;
+    float: right;
+}
+
+.isMobile {
+    .sideBar {
+        height: auto;
+    }
+    .navBtn {
+        display: block;
+    }
+    .sidebarTree {
+        display: none;
+        &.active {
+            display: block;
+        }
+    }
+}
+
