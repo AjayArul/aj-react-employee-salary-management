@@ -41,14 +41,14 @@ class BackendClient {
 
         return instance.get(path)
             .then(response => (response))
-            .catch((error) => {error})
+            .catch((error) => error)
     };
 
     delete = path => {
         this.enableRequestInterceptors();
         return axios.delete(path)
             .then(response => (response))
-            .catch((error) => { error })
+            .catch((error) => error)
     };
 
     put = (path, data, stringify = true, dataAsParam = true) => {

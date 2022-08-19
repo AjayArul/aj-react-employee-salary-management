@@ -1,16 +1,18 @@
-import {memo, useState} from 'react'
+import { memo, useState } from 'react'
 import Button from '@material-ui/core/Button';
 import { DropzoneDialog } from "material-ui-dropzone";
 
 const UploadCSV = ({handleOnSubmit}) => {
     
     const [open, setOpen] = useState(false);
-
+    const handleOpen = (bool) => {
+        setOpen(bool)
+    }
     return (
         <>
             <div className='upload' style={{ textAlign: "right" }}>
-                <Button data-testid='uploadButton' variant="contained" color="primary" onClick={()=> setOpen(true)}>
-                    Upload Employees
+                <Button className='btn' data-testid='uploadButton' variant="contained" color="primary" onClick={()=>handleOpen(true)}>
+                    Upload Employee
                 </Button>
                 <DropzoneDialog 
                     as="upload"
@@ -18,10 +20,10 @@ const UploadCSV = ({handleOnSubmit}) => {
                     filesLimit={1} 
                     acceptedFiles={["text/csv"]} 
                     maxFileSize={2048} 
-                    onClose={() => setOpen(false)}
+                    onClose={() => handleOpen(false)}
                     onSave={(files) => {
                         handleOnSubmit(files);
-                        setOpen(false);
+                        handleOpen(false);
                     }}
                     showFileNamesInPreview={true}
                     dialogTitle="Upload Employees Details"

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ReusableAlert from './../../components/alert/ReusableAlert';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
@@ -11,27 +11,27 @@ describe('renders "Alert" with redux', () => {
 
     it('Check the severity SUCCESS props!"', () => {
         store = mockStore(initialState);
-        const { getByText } = render(
+        render(
             <Provider store={store}>
                 <BrowserRouter>
                     <ReusableAlert severity='success' isOpen={true} message='create successfully!' alertClose={jest.fn()} />
                 </BrowserRouter>
             </Provider>);
 
-        expect(getByText('create successfully!')).not.toBeNull();
+        expect(screen.getByText('create successfully!')).not.toBeNull();
         
     });
 
     it('Check the severity ERROR props!"', () => {
         store = mockStore(initialState);
-        const { getByText } = render(
+        render(
             <Provider store={store}>
                 <BrowserRouter>
                     <ReusableAlert severity='error' isOpen={true} message='failed try again!' alertClose={jest.fn()} />
                 </BrowserRouter>
             </Provider>);
 
-        expect(getByText('failed try again!')).not.toBeNull();
+        expect(screen.getByText('failed try again!')).not.toBeNull();
         
     });
 });

@@ -1,0 +1,47 @@
+.reuseTable {
+    width: 100%;
+    margin: 16px 0;
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    border-radius: 4px;
+
+    .filterBox {
+        & > * {
+            margin: 8px;
+        }
+    }
+
+    .tableContainer {
+
+        .visuallyHidden {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1;
+            margin: -1;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            top: 20;
+            width: 1;
+        }
+        .thumbnail {
+            background-color: black;
+            width: 75px;
+            height: 50px;
+            display: inline-block; /* makes it fit in like an <img> */
+            background-size: cover; /* or contain */
+            background-position: center center;
+            background-repeat: no-repeat;
+            margin-right: 8px;
+        }
+        .vericalCenter {
+            display:flex; flex-wrap: nowrap; align-items: center
+        }
+
+    }
+
+    
+    // reset miu table
+    .MuiTableBody-root .MuiTableCell-root {
+        padding: 8px;
+    }
+}

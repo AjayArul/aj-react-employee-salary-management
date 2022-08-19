@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
@@ -10,12 +10,12 @@ describe('renders APP checked with redux', () => {
 
     it('Shows "Welcome to Salary Manager!"', () => {
         store = mockStore(initialState);
-        const { getByText } = render(
+        render(
             <Provider store={store}>
                 <App />
             </Provider>
         );
 
-        expect(getByText('Welcome to Salary Manager')).not.toBeNull();
+        expect(screen.getByText('Welcome to Salary Manager')).not.toBeNull();
     });
 });

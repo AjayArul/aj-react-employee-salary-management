@@ -2,7 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware} from 'redux'
 import { render as rtlRender } from '@testing-library/react'
-import rootReducer from './../store/rootReducer';
+import rootReducer from '../store/rootReducer';
 import { BrowserRouter } from "react-router-dom";
 import thunkMiddleware from 'redux-thunk'
 

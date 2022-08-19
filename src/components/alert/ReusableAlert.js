@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         bottom: 0
     },
     alert: {
-        zIndex: '100',
+        zIndex: '200',
         position: 'relative'
     }
 }));

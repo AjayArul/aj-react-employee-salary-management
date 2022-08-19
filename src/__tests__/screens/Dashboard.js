@@ -11,9 +11,8 @@ afterEach(() => {
 
 describe('renders Dashboard checked with redux', () => {
     it('Shows "Welcome to Salary Manager!"', () => {
-        const {getByText} = renderWithRedux(<Dashboard />)
-        
-        expect(getByText('Dashboard')).not.toBeNull();
+        renderWithRedux(<Dashboard />)
+        expect(screen.getByText('Dashboard')).not.toBeNull();
     });
 });
 
@@ -39,5 +38,5 @@ test("Upload emplyees api call", async() => {
     const button = screen.getByRole('button', { name: /Submit/i })
     fireEvent.click(await button);
     await waitForElementToBeRemoved(()=> screen.queryByText("Submit"));
-    expect(screen.getByText(/Upload Employees/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upload Employee/i)).toBeInTheDocument();
 });
