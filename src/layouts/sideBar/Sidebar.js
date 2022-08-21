@@ -24,9 +24,9 @@ const Sidebar = () => {
         children: []
     },
     {
-        id: "employees", order: 1, 
+        id: "dashboard", order: 1, 
         key: screenRoutes.DASHBOARD,
-        label: "Employees",
+        label: "Dashboard",
         children: []
     }
   ];  
@@ -76,7 +76,12 @@ const Sidebar = () => {
 
   return (
     <div className="sideBar">
-        <h1>AJ LOGO
+        <h1>
+          <span className='user'>
+            <span><img className="userThumb" src="./aj_fav.png" alt="user"/></span>
+            <span className='userName'>AJ LOGO AJ LOGO AJ LOGO AJ LOGO AJ LOGO </span>
+          </span>
+          
           <span className="navBtn">
             <IconButton
               aria-label="menu"

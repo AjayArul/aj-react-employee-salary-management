@@ -1,13 +1,22 @@
+export const employeeKeys = {
+  ID: 'id',
+  NAME: 'full_name',
+  LOGIN: 'login_id',
+  SALARY: 'salary',
+  PROFILE_PIC: 'profile_pic'
+}
+
+
 export const columns = [
-    { id: 'id', label: 'Id', minWidth: 120, sort:true, img:'profile_pic' },
-    { id: 'full_name', label: 'Name', minWidth: 170, sort:true,
+    { id: employeeKeys.ID, label: 'Id', minWidth: 120, sort:true, img: employeeKeys.PROFILE_PIC },
+    { id: employeeKeys.NAME, label: 'Name', minWidth: 170, sort:true,
       format: (value) => value.toLocaleString('en-US')
     },
-    { id: 'login_id', label: 'Login', minWidth: 100, sort:true,
+    { id: employeeKeys.LOGIN, label: 'Login', minWidth: 100, sort:true,
       format: (value) => value.toLocaleString('en-US')
     },
     {
-      id: 'salary',
+      id: employeeKeys.SALARY,
       label: 'Salary',
       minWidth: 100,
       align: 'right',

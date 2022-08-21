@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitForElementToBeRemoved} from '@testing-library/react';
-import UploadCSV from './../../components/uploadFile/UploadCSV';
+import UploadCSV from '../../components/employees/UploadCSV';
 
 test('renders correctly', () => {
   render(<UploadCSV/>);

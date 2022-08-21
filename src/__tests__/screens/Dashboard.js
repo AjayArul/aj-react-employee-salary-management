@@ -1,5 +1,8 @@
-import { renderWithRedux, fireEvent, screen, waitForElementToBeRemoved } from '../../utils/test-utils';
+import { wait } from 'moxios';
+import { renderWithRedux, fireEvent, screen, waitForElementToBeRemoved, cleanup } from '../../utils/test-utils';
 import Dashboard from './../../screens/employees/Dashboard';
+
+afterEach(cleanup);
 
 let originFetch;
 beforeEach(() => {
@@ -39,4 +42,62 @@ test("Upload emplyees api call", async() => {
     fireEvent.click(await button);
     await waitForElementToBeRemoved(()=> screen.queryByText("Submit"));
     expect(screen.getByText(/Upload Employee/i)).toBeInTheDocument();
+});
+
+describe('Employees List actions', () => {
+    it('Edit button click', async ()=>{
+        renderWithRedux(<Dashboard />, {
+            initialState: { employees: { items: [{"id": "1", }] } }
+          });
+        const editBtn = screen.getAllByTestId("editIconBtn")[0];
+        fireEvent.click(editBtn);
+        expect(screen.getByText(/Edit/i)).toBeInTheDocument();
+    })
+    it('Edit popup, change text and save.', async ()=>{
+        renderWithRedux(<Dashboard />, {
+            initialState: { employees: { items: [{"id": "1", "full_name" : "test before" }] } }
+          });
+        const editBtn = screen.getAllByTestId("editIconBtn")[0];
+        fireEvent.click(editBtn);
+        const input = screen.getByText(/test before/i);
+        expect(input).toBeInTheDocument();
+        
+        const salary = document.querySelector('#salary');
+        fireEvent.change(salary, {target: {value: 12345}});
+        expect(salary).toHaveProperty("value", "12345");
+
+        const editSaveBtn = screen.getByTestId("editSaveBtn");
+        fireEvent.click(editSaveBtn);
+        await waitForElementToBeRemoved(()=> screen.queryByText(/Save/i));
+    })
+    it('Edit popup, Cancel button action.', async ()=>{
+        renderWithRedux(<Dashboard />, {
+            initialState: { employees: { items: [{"id": "1", "full_name" : "test before" }] } }
+          });
+        const editBtn = screen.getAllByTestId("editIconBtn")[0];
+        fireEvent.click(editBtn);
+        const input = screen.getByText(/test before/i);
+        expect(input).toBeInTheDocument();
+        const editCancelBtn = screen.getByTestId("editCancelBtn");
+        fireEvent.click(editCancelBtn);
+        await waitForElementToBeRemoved(()=> screen.queryByText("Cancel"));
+    })
+    it('Delete button click', async ()=>{
+        renderWithRedux(<Dashboard />, {
+            initialState: { employees: { items: [{"id": "1", }] } }
+          });
+        const deleteBtn = screen.getAllByTestId("deleteIconBtn")[0];
+        fireEvent.click(deleteBtn);
+        expect(screen.getByText(/Are you sure to delete this employee record?/i)).toBeInTheDocument();
+    })
+    it('Delete popup, confirm worning dialog.', async ()=>{
+        renderWithRedux(<Dashboard />, {
+            initialState: { employees: { items: [{"id": "1", }] } }
+          });
+        const deleteBtn = screen.getAllByTestId("deleteIconBtn")[0];
+        fireEvent.click(deleteBtn);
+        const yesBtn = screen.getByTestId("yesBtn");
+        fireEvent.click(yesBtn);
+        await waitForElementToBeRemoved(()=> screen.queryByText("Yes"));
+    })
 });

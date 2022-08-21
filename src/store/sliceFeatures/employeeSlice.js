@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { _getEmplyees, _uploadEmployee } from '../../services/employeeServices';
+import { createSlice, createAsyncThunk, isPending, isRejectedWithValue, isFulfilled } from '@reduxjs/toolkit'
+import { _getEmplyees, _uploadEmployee, _updateEmplyee, _deleteEmplyee } from '../../services/employeeServices';
 import { errorValidation } from '../../utils/errorCheck';
 
 const initialState = {
@@ -23,11 +23,38 @@ export const getEmployees = createAsyncThunk(
 
 export const uploadEmployee = createAsyncThunk(
   "employee/upload",
-  async (params, { dispatch,  fulfillWithValue, rejectWithValue }) => {
-      const response = await _uploadEmployee() // api service call 
+  async (body, { dispatch, fulfillWithValue, rejectWithValue }) => {
+      const response = await _uploadEmployee(body) // api service call 
       if (response?.status === 200) {
         dispatch(getEmployees());
         return fulfillWithValue("Successfully created!"); 
+      } else {
+        return rejectWithValue(errorValidation(response));
+      }
+  }
+);
+
+export const updateEmplyee = createAsyncThunk(
+  "employee/update",
+  async (params, { dispatch, fulfillWithValue, rejectWithValue }) => {
+    const {id, data} = params;
+    const response = await _updateEmplyee(id, data) // api service call 
+    if (response?.status === 200) {
+      dispatch(getEmployees());
+      return fulfillWithValue(`Successfully updated!`); 
+    } else {
+      return rejectWithValue(errorValidation(response));
+    }
+  }
+);
+
+export const deleteEmplyee = createAsyncThunk(
+  "employee/delete",
+  async (id, { dispatch,  fulfillWithValue, rejectWithValue }) => {
+      const response = await _deleteEmplyee(id) // api service call 
+      if (response?.status === 200) {
+        dispatch(getEmployees());
+        return fulfillWithValue("Successfully Deleted!"); 
       } else {
         return rejectWithValue(errorValidation(response));
       }
@@ -39,36 +66,48 @@ const employeeSlice = createSlice({
   initialState,
   reducers: {
     clearStatus(state) {
-      state.error = null;
-      state.success = null;
+      return { ...state,
+        error: null,
+        success: null
+      }
     }
   },
-  extraReducers: {
-    [getEmployees.pending]: (state) => {
-      state.loading = true;
-    },
-    [getEmployees.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.items = payload;
-    },
-    [getEmployees.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
-    [uploadEmployee.pending]: (state) => {
-      state.loading = true;
-    },
-    [uploadEmployee.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.success = payload;
-    },
-    [uploadEmployee.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
+  extraReducers: builder => {
     
-  },
-})
+    builder.addCase(getEmployees.fulfilled, (state, {payload}) => ({
+      ...state, 
+      loading: false,
+      items: payload
+    }))
+
+    builder.addMatcher(
+      isPending(getEmployees, uploadEmployee, updateEmplyee, deleteEmplyee), // <-- thunk actions
+      (state) => ({
+        ...state, 
+        loading: true
+      })
+    )
+
+    builder.addMatcher(
+      isRejectedWithValue(getEmployees, uploadEmployee, updateEmplyee, deleteEmplyee), // <-- thunk actions
+      (state, {payload}) => ({
+        ...state, 
+        loading: false,
+        error: payload
+      })
+    )
+
+    builder.addMatcher(
+      isFulfilled(uploadEmployee, updateEmplyee, deleteEmplyee), // <-- thunk actions
+      (state, {payload}) => ({
+        ...state,
+        success: payload
+      })
+    )
+
+  }
+
+});
 export const {clearStatus} = employeeSlice.actions
 
 export default employeeSlice.reducer;

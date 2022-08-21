@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Loading from './../../components/loading/Loading';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
@@ -11,13 +11,14 @@ describe('renders "Loading" with redux', () => {
 
     it('Check the severity SUCCESS props!"', () => {
         store = mockStore(initialState);
-        const { getByRole } = render(
+        render( 
             <Provider store={store}>
                 <BrowserRouter>
                     <Loading/>
                 </BrowserRouter>
-            </Provider>);
-        expect(getByRole('progressbar')).not.toBeNull();
+            </Provider> 
+        );
+        expect(screen.getByRole('progressbar')).not.toBeNull();
         
     });
 });

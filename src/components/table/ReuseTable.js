@@ -17,7 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import './ResueTable.scss';
 
 const ReuseTable = (props) => {
-  const {listItems, columns, callEditPage, callDeletePage} = props;
+  const {listItems, columns, openEditPage, callDeletePage} = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [orderBy, setOrderBy] = React.useState();
@@ -149,7 +149,7 @@ const ReuseTable = (props) => {
                                             color="inherit"
                                             size="small"
                                             onClick={() => {
-                                              callEditPage(row)
+                                              openEditPage(row)
                                             }}
                                           >
                                             <EditIcon/>
@@ -157,7 +157,7 @@ const ReuseTable = (props) => {
                                           <IconButton
                                             data-testid="deleteIconBtn"
                                             aria-label="delete"
-                                            color="inherit"
+                                            color="secondary"
                                             size="small"
                                             onClick={() => {
                                               callDeletePage(row)
@@ -174,7 +174,11 @@ const ReuseTable = (props) => {
                           );
                           })}
                       </TableBody>
-                    : <TableBody><TableRow hover role="row" tabIndex={-1} ><TableCell>Data not found</TableCell></TableRow></TableBody>
+                    : <TableBody>
+                        <TableRow hover role="row" tabIndex={-1} >
+                          <TableCell>Data not found</TableCell>
+                        </TableRow>
+                      </TableBody>
                     }
                 </Table>
             </TableContainer>

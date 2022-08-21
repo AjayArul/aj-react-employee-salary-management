@@ -34,7 +34,7 @@ const props = {
         },
         { id: 'action', label: 'Action', minWidth: 170, align: 'right', sort:false }
     ],
-    callEditPage: jest.fn(),
+    openEditPage: jest.fn(),
     callDeletePage: jest.fn()
 };
   
@@ -121,7 +121,7 @@ test('EmployeesList edit and delete function test', async() => {
 
   const editIconBtn =  screen.getAllByTestId("editIconBtn")[0];
   fireEvent.click(editIconBtn);
-  expect(props.callEditPage).toHaveBeenCalledTimes(1);
+  expect(props.openEditPage).toHaveBeenCalledTimes(1);
 });
 
 test('EmployeesList row per page function', async() => {

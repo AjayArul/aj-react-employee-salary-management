@@ -38,6 +38,7 @@ const ReusableAlert = (props) => {
                             aria-label="close"
                             color="inherit"
                             size="small"
+                            data-testid="alertClose"
                             onClick={alertClose}
                         >
                             <CloseIcon fontSize="inherit" />

@@ -1,14 +1,11 @@
 import React, { useEffect, useState, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import Loading from '../../components/loading/Loading';
 import ReusableAlert from '../../components/alert/ReusableAlert';
 import { clearStatus } from './../../store/sliceFeatures/employeeSlice'
-import { screenRoutes } from './../../constants/routesPath'
 
 const PageLayout = (props) => {
     const {children, title } = props;
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const success = useSelector(state => state.employees.success);
     const errors = useSelector(state => state.employees.error);
@@ -22,7 +19,7 @@ const PageLayout = (props) => {
             setAlertReady(true);
             setTimeout(() => {
                 setAlertReady(false);
-                dispatch(clearStatus('success'));
+                dispatch(clearStatus());
             }, 5000);
         }
         loading ? setIsLoading(true) 
@@ -36,9 +33,9 @@ const PageLayout = (props) => {
     <>
         { isLoading && <Loading /> }
         {success && <ReusableAlert severity='success' isOpen={alertReady} message={success} 
-            alertClose={()=>{setAlertReady(false); dispatch(clearStatus('success'));}}/> }
+            alertClose={()=>{setAlertReady(false); dispatch(clearStatus());}}/> }
         {  errors?.response && <ReusableAlert severity='error' isOpen={true} message={errors?.response} 
-            alertClose={()=>{navigate(screenRoutes.HOME); dispatch(clearStatus(''));}}/>}    
+            alertClose={()=>{dispatch(clearStatus());}}/>}    
         <h1 className='title'>{title}</h1> 
         {children}  
     </>

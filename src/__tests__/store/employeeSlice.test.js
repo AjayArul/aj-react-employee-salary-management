@@ -1,9 +1,16 @@
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import moxios from 'moxios';
+
 import employeeSlice, { 
-    initialState, getEmployees, uploadEmployee, clearStatus
+    initialState, getEmployees, uploadEmployee, clearStatus, updateEmplyee, deleteEmplyee
 } from './../../store/sliceFeatures/employeeSlice'
 
 
-describe('EMPLOYEE SLICE TESTS', () => {
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+
+describe('EMPLOYEE SLICE REDUCER TESTS', () => {
 
     it('clearStatus', () => {
         const nextState = employeeSlice(initialState, clearStatus());
@@ -24,7 +31,7 @@ describe('EMPLOYEE SLICE TESTS', () => {
         const mockAsyncError = {responce: 'error message'}
         const nextState = employeeSlice(initialState, getEmployees.rejected(mockAsyncError));
         expect(nextState.loading).toBe(false);
-        expect(nextState.error).toBe(undefined);    
+        expect(nextState.error).toBe(null);
     })
     it('upload data action is pending', () => {
         const nextState = employeeSlice(initialState, uploadEmployee.pending());
@@ -40,7 +47,63 @@ describe('EMPLOYEE SLICE TESTS', () => {
         const mockAsyncError = {responce: 'error message'}
         const nextState = employeeSlice(initialState, uploadEmployee.rejected(mockAsyncError));
         expect(nextState.loading).toBe(false);
-        expect(nextState.error).toBe(undefined);    
+        expect(nextState.error).toBe(null);  
     })
 
+});
+
+describe('EMPLOYEE SLICE ACTION TESTS', () => {
+    beforeEach(() => {
+        moxios.install();
+    });
+
+    afterEach(() => {
+        moxios.uninstall();
+    });
+    const store = mockStore();
+    function apiCall (responseCode = 200) {
+        const responsePayload =  [{id: 123}, {id: 345}]
+        // eslint-disable-next-line testing-library/await-async-utils
+        moxios.wait(() => {
+            const request = moxios.requests.mostRecent();
+            request.respondWith({
+            status: responseCode,
+            response: responsePayload
+            });
+        });
+    }
+
+    it('getEmployees PASS', async() => {
+        apiCall();
+        const result = await store.dispatch(getEmployees())
+        expect(result.type).toBe('employee/request/fulfilled')
+    });
+    it('getEmployees FAILS', async() => {
+        apiCall(0);
+        const result = await store.dispatch(getEmployees())
+        expect(result.type).toBe('employee/request/rejected')
+    });
+    it('uploadEmployee PASS', async() => {
+        apiCall();
+        const file = new File(["file"], "ping.csv", {
+            type: "text/csv",
+        });
+        const result = await store.dispatch(uploadEmployee(file))
+        expect(result.type).toBe('employee/upload/fulfilled')
+    });
+    it('uploadEmployee FAILS', async() => {
+        apiCall(0);
+        const result = await store.dispatch(uploadEmployee())
+        expect(result.type).toBe('employee/upload/rejected')
+    });
+
+    // TODO update and delete
+    // it('updateEmplyee PASS', async() => {
+    //     apiCall(200);
+    //     const param = {id: 2, data: {id: 2, full_name: "new aj", login_id: "allok", salary:400}}
+    //     const result = await store.dispatch(updateEmplyee(param))
+    //     console.log(result)
+    //     expect(await store.dispatch(getEmployees())).toBeCalled();
+    //     // expect(result.type).toBe('employee/update/fulfilled')
+    // });
 });
