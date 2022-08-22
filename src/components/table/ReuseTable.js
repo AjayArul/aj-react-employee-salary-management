@@ -176,7 +176,7 @@ const ReuseTable = (props) => {
                       </TableBody>
                     : <TableBody>
                         <TableRow hover role="row" tabIndex={-1} >
-                          <TableCell>Data not found</TableCell>
+                          <TableCell colSpan={columns.length}>Data not found</TableCell>
                         </TableRow>
                       </TableBody>
                     }

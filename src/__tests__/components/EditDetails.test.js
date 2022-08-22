@@ -34,11 +34,11 @@ test('Employee Edit submit should pass', () => {
 test('Employee Edit cancel all', () => {
   render(<EditDetails {...props} />);
 
-   const name = document.querySelector('#name');
+   const name = document.querySelector('#full_name');
    fireEvent.change(name, {target: {"value": "Ajay Arul"}});
    expect(name).toHaveProperty("value", "Ajay Arul");
 
-   const login = document.querySelector('#login');
+   const login = document.querySelector('#login_id');
    fireEvent.change(login, {target: {"value": "Aj"}});
    expect(login).toHaveProperty("value", "Aj");
 

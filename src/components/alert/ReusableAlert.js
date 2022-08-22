@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
     bg: {
-        position: 'absolute',
+        position: 'fixed',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
     },
     alert: {
         zIndex: '200',
-        position: 'relative'
+        position: 'fixed',
+        top: '10px',
+        left: '10px',
+        right: '10px'
     }
 }));
 

@@ -1,4 +1,4 @@
-import React, {memo, useState} from 'react';
+import React, {memo, useState, useCallback, useEffect} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -38,73 +38,85 @@ const styles = (theme) => ({
 
 const EditDetails = (props) => {
     const {isOpen, data, handleClose, onSubmit} = props;
-    const {ID, NAME, LOGIN, SALARY, PROFILE_PIC} = employeeKeys;
+    const {ID, NAME, LOGIN, SALARY} = employeeKeys;
 
-    const [eName, setEName] = useState(null);
-    const [eLogin, setELogin] = useState(null);
-    const [eSalary, setSalary] = useState(null);
+    const [employees, setEmployees] = useState(data);
+    const [isBlockNav, setIsBlockNav] = useState(true);
 
     const onReset = () => {
         handleClose();
-        setEName(null);
-        setELogin(null);
-        setSalary(null);   
+        setEmployees(state => ({ ...state, ...data}));
+        setIsBlockNav(true);
     }
-    const updateNewData = () => {
-        const newData = {
-            [NAME]: eName || data[NAME],
-            [LOGIN]: eLogin || data[LOGIN],
-            [SALARY]: eSalary || data[SALARY],
-            [PROFILE_PIC]: data[PROFILE_PIC],
-        }
-        onSubmit(data.id, newData);
+
+    function updateNewData(e) {
+        e.preventDefault();
+
+        onSubmit(data.id, employees);
         onReset();
     }
+
+    const onChangeHandler = useCallback(
+        ({target}) => {
+            setEmployees(state => ({ ...state, [target.name]:target.value }));
+            setIsBlockNav(false);
+        } , []
+    );
+    
+    useEffect(()=>{
+        data && Object.keys(data).length !== 0 && setEmployees(data);
+    },[data])
+
 
     return (
         <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={onReset} aria-labelledby="form-dialog-title">
             <DialogTitle id="edit-title" onClose={onReset}>Edit</DialogTitle>
-            <DialogContent>
-                <h1>Employee id {data[ID]}</h1>
-                <TextField
-                    variant="outlined"
-                    margin="dense"
-                    id="name"
-                    label="Name"
-                    type="text"
-                    fullWidth
-                    value={eName || data[NAME]}
-                    onChange={(e)=>setEName(e.target.value)}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="dense"
-                    id="login"
-                    label="Login"
-                    type="text"
-                    fullWidth
-                    value={eLogin || data[LOGIN]}
-                    onChange={(e)=>setELogin(e.target.value)}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="dense"
-                    id="salary"
-                    label="Salary"
-                    type="number"
-                    fullWidth
-                    value={eSalary || data[SALARY]}
-                    onChange={(e)=>setSalary(e.target.value)}
-                />
-            </DialogContent>
-            <DialogActions>
-                <Button data-testid="editCancelBtn" onClick={onReset} variant="outlined">
-                    Cancel
-                </Button>
-                <Button data-testid="editSaveBtn" onClick={updateNewData} variant="outlined" color="primary" disabled={!(eName||eLogin||eSalary)?true:false}>
-                    Save
-                </Button>
-            </DialogActions>
+            <form noValidate autoComplete="off" onSubmit={updateNewData}>
+                <DialogContent>
+                    <h1>Employee id {data[ID]}</h1>
+                    <TextField
+                        variant="outlined"
+                        margin="dense"
+                        id={NAME}
+                        label="Name"
+                        type="text"
+                        fullWidth
+                        name={NAME}
+                        value={employees[NAME] || ''}
+                        onChange={onChangeHandler}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="dense"
+                        id={LOGIN}
+                        label="Login"
+                        type="text"
+                        fullWidth
+                        name={LOGIN}
+                        value={employees[LOGIN] || ''}
+                        onChange={onChangeHandler}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="dense"
+                        id={SALARY}
+                        label="Salary"
+                        type="number"
+                        fullWidth
+                        name={SALARY}
+                        value={employees[SALARY] || ''}
+                        onChange={onChangeHandler}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button data-testid="editCancelBtn" onClick={onReset} variant="outlined">
+                        Cancel
+                    </Button>
+                    <Button data-testid="editSaveBtn" type="submit" variant="outlined" color="primary" disabled={isBlockNav}>
+                        Save
+                    </Button>
+                </DialogActions>
+            </form>
         </Dialog>
     );
 }

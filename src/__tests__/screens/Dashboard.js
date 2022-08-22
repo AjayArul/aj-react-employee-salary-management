@@ -60,7 +60,7 @@ describe('Employees List actions', () => {
         fireEvent.click(screen.getAllByTestId("editIconBtn")[0]);
         expect(await screen.findByText(/test before/i)).toBeInTheDocument();
         
-        const salary = document.querySelector('#name');
+        const salary = document.querySelector('#full_name');
         fireEvent.change(salary, {"target": {"value": "12345"}});
         expect(salary).toHaveProperty("value", "12345");
 
