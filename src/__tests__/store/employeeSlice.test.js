@@ -49,6 +49,13 @@ describe('EMPLOYEE SLICE REDUCER TESTS', () => {
         expect(nextState.loading).toBe(false);
         expect(nextState.error).toBe(null);  
     })
+    it('update data action is fulfilled', () => {
+        const mockAsyncPayload = {message: "success", data: []}
+        const nextState = employeeSlice(initialState, uploadEmployee.fulfilled(mockAsyncPayload));
+        expect(nextState.loading).toBe(false); 
+        expect(nextState.success).toBe(mockAsyncPayload.message); 
+        expect(nextState.items).toBe(mockAsyncPayload.data);
+    })
 
 });
 

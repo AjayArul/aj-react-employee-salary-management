@@ -78,7 +78,7 @@ const ReuseTable = (props) => {
   useEffect(()=>{
     setRows(listItems);
   },[listItems]);
-
+                    
   return (
     <div className="reuseTable">
         <Box className="filterBox">
@@ -123,7 +123,7 @@ const ReuseTable = (props) => {
                         ))}
                         </TableRow>
                     </TableHead>
-                    {rows && rows.length > 0 ?
+                    {rows && Array.isArray(rows) && rows.length > 0 ?
                       <TableBody>
                           {stableSort(rows, getComparator(order, orderBy))
                           .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

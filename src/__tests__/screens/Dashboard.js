@@ -13,13 +13,13 @@ afterEach(() => {
 });
 
 describe('renders Dashboard checked with redux', () => {
-    it('Shows "Welcome to Salary Manager!"', () => {
+    it('Shows "Welcome to Salary Manager!"', async () => {
         renderWithRedux(<Dashboard />)
-        expect(screen.getByText('Dashboard')).not.toBeNull();
+        expect(await screen.findByText('Dashboard')).toBeInTheDocument(); 
     });
 });
 
-test("Upload emplyees api call", async() => {
+test("Upload emplyees api call", async () => {
     renderWithRedux(<Dashboard />, {success:null, error:null });
     const uploadButton = screen.getByTestId("uploadButton");
     fireEvent.click(uploadButton);
@@ -32,14 +32,14 @@ test("Upload emplyees api call", async() => {
     Object.defineProperty(inputEl, "files", {
         value: [file],
     });
-    fireEvent.change(inputEl, "files", {
+    fireEvent.change( inputEl, "files", {
       value: [file],
     });
     expect(await screen.findByText("ping.csv")).toBeInTheDocument(); 
 
     // eslint-disable-next-line testing-library/no-node-access
     const button = screen.getByRole('button', { name: /Submit/i })
-    fireEvent.click(await button);
+    fireEvent.click(button);
     await waitForElementToBeRemoved(()=> screen.queryByText("Submit"));
     expect(screen.getByText(/Upload Employee/i)).toBeInTheDocument();
 });
@@ -51,19 +51,17 @@ describe('Employees List actions', () => {
           });
         const editBtn = screen.getAllByTestId("editIconBtn")[0];
         fireEvent.click(editBtn);
-        expect(screen.getByText(/Edit/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Edit/i)).toBeInTheDocument();
     })
     it('Edit popup, change text and save.', async ()=>{
         renderWithRedux(<Dashboard />, {
             initialState: { employees: { items: [{"id": "1", "full_name" : "test before" }] } }
           });
-        const editBtn = screen.getAllByTestId("editIconBtn")[0];
-        fireEvent.click(editBtn);
-        const input = screen.getByText(/test before/i);
-        expect(input).toBeInTheDocument();
+        fireEvent.click(screen.getAllByTestId("editIconBtn")[0]);
+        expect(await screen.findByText(/test before/i)).toBeInTheDocument();
         
-        const salary = document.querySelector('#salary');
-        fireEvent.change(salary, {target: {value: 12345}});
+        const salary = document.querySelector('#name');
+        fireEvent.change(salary, {"target": {"value": "12345"}});
         expect(salary).toHaveProperty("value", "12345");
 
         const editSaveBtn = screen.getByTestId("editSaveBtn");
@@ -76,8 +74,7 @@ describe('Employees List actions', () => {
           });
         const editBtn = screen.getAllByTestId("editIconBtn")[0];
         fireEvent.click(editBtn);
-        const input = screen.getByText(/test before/i);
-        expect(input).toBeInTheDocument();
+        expect(await screen.findByText(/test before/i)).toBeInTheDocument();
         const editCancelBtn = screen.getByTestId("editCancelBtn");
         fireEvent.click(editCancelBtn);
         await waitForElementToBeRemoved(()=> screen.queryByText("Cancel"));
@@ -88,7 +85,7 @@ describe('Employees List actions', () => {
           });
         const deleteBtn = screen.getAllByTestId("deleteIconBtn")[0];
         fireEvent.click(deleteBtn);
-        expect(screen.getByText(/Are you sure to delete this employee record?/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Are you sure to delete this employee record?/i)).toBeInTheDocument();
     })
     it('Delete popup, confirm worning dialog.', async ()=>{
         renderWithRedux(<Dashboard />, {

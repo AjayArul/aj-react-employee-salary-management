@@ -25,9 +25,9 @@ export const uploadEmployee = createAsyncThunk(
   "employee/upload",
   async (body, { dispatch, fulfillWithValue, rejectWithValue }) => {
       const response = await _uploadEmployee(body) // api service call 
-      if (response?.status === 200) {
+      if (response?.status === 200 || response.status === 201) {
         dispatch(getEmployees());
-        return fulfillWithValue("Successfully created!"); 
+        return fulfillWithValue("Employee create successfully!"); 
       } else {
         return rejectWithValue(errorValidation(response));
       }
@@ -36,12 +36,19 @@ export const uploadEmployee = createAsyncThunk(
 
 export const updateEmplyee = createAsyncThunk(
   "employee/update",
-  async (params, { dispatch, fulfillWithValue, rejectWithValue }) => {
+  async (params, { dispatch, getState, fulfillWithValue, rejectWithValue }) => {
     const {id, data} = params;
     const response = await _updateEmplyee(id, data) // api service call 
-    if (response?.status === 200) {
-      dispatch(getEmployees());
-      return fulfillWithValue(`Successfully updated!`); 
+    
+    if (response?.status === 200 || response.status === 204) {
+      const stateItems = [...getState().employees?.items]
+      if (Object.keys(stateItems).length > 0 ) {
+        stateItems[stateItems.findIndex(el => el.id === id)] = {...data, "id": id}
+        return {"message": 'Employee update successfully!', "data": stateItems};
+      }  else {
+        dispatch(getEmployees());
+        return fulfillWithValue(`Employee update successfully!`);
+      }
     } else {
       return rejectWithValue(errorValidation(response));
     }
@@ -50,11 +57,18 @@ export const updateEmplyee = createAsyncThunk(
 
 export const deleteEmplyee = createAsyncThunk(
   "employee/delete",
-  async (id, { dispatch,  fulfillWithValue, rejectWithValue }) => {
+  async (id, { dispatch, getState, fulfillWithValue, rejectWithValue }) => {
       const response = await _deleteEmplyee(id) // api service call 
-      if (response?.status === 200) {
-        dispatch(getEmployees());
-        return fulfillWithValue("Successfully Deleted!"); 
+      if (response?.status === 200 || response.status === 204) {
+        const stateItems = getState().employees?.items
+        if (Object.keys(stateItems).length !== 0 ) {
+          const deleteData = stateItems.filter((el) => el.id !== id );
+          return {"message": 'Employee deleted successfully!', "data": deleteData};
+        } else {
+          dispatch(getEmployees());
+          return fulfillWithValue("Employee deleted successfully!"); 
+        }
+        
       } else {
         return rejectWithValue(errorValidation(response));
       }
@@ -99,10 +113,22 @@ const employeeSlice = createSlice({
 
     builder.addMatcher(
       isFulfilled(uploadEmployee, updateEmplyee, deleteEmplyee), // <-- thunk actions
-      (state, {payload}) => ({
-        ...state,
-        success: payload
-      })
+      (state, {payload}) => {
+        if (typeof payload !== 'string' && Object.keys(payload > 0)) {
+          return {
+            ...state,
+            loading: false,
+            items: payload.data,
+            success: payload.message
+          }
+        } else {
+          return {
+            ...state,
+            loading: false,
+            success: payload
+          }
+        }
+      }
     )
 
   }
