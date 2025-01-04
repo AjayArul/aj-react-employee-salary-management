@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import UploadCSV from '../../components/employees/UploadCSV';
+// import UploadCSV from '../../components/employees/UploadCSV';
 import ReuseTable from './../../components/table/ReuseTable';
 import { 
   getEmployees, 
@@ -9,11 +9,11 @@ import {
   deleteEmplyee 
 } from './../../store/sliceFeatures/employeeSlice'
 import PageLayout from './../../layouts/pageLayout/PageLayout';
-import { columns, employeeKeys } from './../../constants/employeesConst';
+import { columns } from './../../constants/employeesConst';
 import CreateEmployee from '../../components/employees/CreateEmployee';
 import EditDetails from '../../components/employees/EditDetails';
 import DeleteDetails from '../../components/employees/DeleteDetails';
-import Papa from 'papaparse'
+// import Papa from 'papaparse'
 import Button from '@material-ui/core/Button';
 
 const Dashboard = () => {

@@ -1,4 +1,4 @@
-import React, {memo, useState, useCallback, useEffect} from 'react';
+import React, {memo, useState, useCallback} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -38,7 +38,7 @@ const styles = (theme) => ({
 
 const CreateEmployee = (props) => {
     const {isOpen, handleClose, onSubmit} = props;
-    const {ID, NAME, LOGIN, SALARY} = employeeKeys;
+    const {NAME, LOGIN, SALARY} = employeeKeys;
 
     const [employees, setEmployees] = useState({});
     const [isBlockNav, setIsBlockNav] = useState(true);
