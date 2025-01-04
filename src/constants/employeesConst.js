@@ -8,7 +8,7 @@ export const employeeKeys = {
 
 
 export const columns = [
-    { id: employeeKeys.ID, label: 'Id', minWidth: 120, sort:true, img: employeeKeys.PROFILE_PIC },
+    { id: employeeKeys.ID, label: 'Id', minWidth: 120, sort:true }, // img: employeeKeys.PROFILE_PIC
     { id: employeeKeys.NAME, label: 'Name', minWidth: 170, sort:true,
       format: (value) => value.toLocaleString('en-US')
     },

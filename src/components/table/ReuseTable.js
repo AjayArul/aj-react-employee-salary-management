@@ -36,9 +36,9 @@ const ReuseTable = (props) => {
   const handleFilter = () => {   
     if (!minSalary && !maxSalary) return;
     setPage(0);
-    if (minSalary && maxSalary) return setRows(listItems.filter(item => item.salary >= minSalary && item.salary <= maxSalary));
-    if (minSalary)  return setRows(listItems.filter(item => item.salary >= minSalary));
-    if (maxSalary) return setRows(listItems.filter(item => item.salary <= maxSalary));
+    if (minSalary && maxSalary) return setRows(listItems.filter(item => Number(item.salary) >= minSalary && Number(item.salary) <= maxSalary));
+    if (minSalary)  return setRows(listItems.filter(item => Number(item.salary) >= minSalary));
+    if (maxSalary) return setRows(listItems.filter(item => Number(item.salary) <= maxSalary));
   };
   const handleFilterReset = () => { 
     setMinSalary('');
